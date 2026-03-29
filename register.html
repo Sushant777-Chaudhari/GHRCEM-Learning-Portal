@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — GHRCEM Learning</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .register-page {
+      min-height:100vh; background:var(--off-white);
+      display:flex; align-items:center; justify-content:center; padding:40px 20px;
+    }
+    .register-card {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:20px; padding:44px 48px;
+      width:560px; max-width:100%;
+      box-shadow:var(--shadow-lg);
+      animation:fadeUp .5s ease;
+    }
+    .register-header { text-align:center; margin-bottom:32px; }
+    .register-logo {
+      width:56px; height:56px;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      border-radius:14px; margin:0 auto 16px;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Playfair Display',serif; font-size:22px; font-weight:800; color:var(--navy);
+    }
+    .register-header h2 { font-family:'Playfair Display',serif; font-size:26px; color:var(--navy); margin-bottom:6px; }
+    .register-header p { font-size:13px; color:var(--muted); }
+    .step-indicator { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:28px; }
+    .step { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; transition:.2s; }
+    .step.active { background:var(--navy); color:var(--gold2); }
+    .step.done { background:var(--green); color:#fff; }
+    .step.pending { background:var(--light-gray); color:var(--muted); }
+    .step-line { height:2px; flex:1; max-width:48px; background:var(--light-gray); transition:.2s; }
+    .step-line.done { background:var(--green); }
+    .btn-register {
+      width:100%; padding:14px;
+      background:var(--navy); color:var(--gold2);
+      border:none; border-radius:10px;
+      font-family:'Playfair Display',serif;
+      font-size:16px; font-weight:700; cursor:pointer; transition:.2s;
+    }
+    .btn-register:hover { background:var(--navy3); }
+    .success-state { text-align:center; padding:20px; display:none; }
+    .success-icon { font-size:56px; margin-bottom:16px; }
+  </style>
+</head>
+<body>
+<div class="register-page">
+  <div class="register-card">
+    <div class="register-header">
+      <div class="register-logo">G</div>
+      <h2>Create Account</h2>
+      <p>G H Raisoni College of Engineering & Management</p>
+    </div>
+
+    <div class="step-indicator">
+      <div class="step active" id="s1">1</div>
+      <div class="step-line" id="sl1"></div>
+      <div class="step pending" id="s2">2</div>
+      <div class="step-line" id="sl2"></div>
+      <div class="step pending" id="s3">3</div>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="step1">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="firstName" placeholder="Rahul" class="form-input" style="background:var(--off-white)">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lastName" placeholder="Patil" class="form-input" style="background:var(--off-white)">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="regEmail" placeholder="rahul.patil@student.ghrcem.edu" class="form-input" style="background:var(--off-white)">
+      </div>
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="tel" id="mobile" placeholder="+91 98765 43210" class="form-input" style="background:var(--off-white)">
+      </div>
+      <button class="btn-register" onclick="goStep(2)">Continue <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step2" style="display:none">
+      <div class="form-group">
+        <label>Role</label>
+        <select id="regRole" class="form-input" style="background:var(--off-white)">
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Department</label>
+          <select class="form-input" style="background:var(--off-white)">
+            <option>Computer Engineering</option>
+            <option>Information Technology</option>
+            <option>Mechanical Engineering</option>
+            <option>Civil Engineering</option>
+            <option>Electronics & Telecom</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Year / Designation</label>
+          <select class="form-input" style="background:var(--off-white)">
+            <option>First Year</option>
+            <option>Second Year</option>
+            <option>Third Year</option>
+            <option>Final Year</option>
+            <option>Assistant Professor</option>
+            <option>Professor</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Roll No. / Employee ID</label>
+        <input type="text" placeholder="e.g. CE2024001" class="form-input" style="background:var(--off-white)">
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-outline" onclick="goStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+        <button class="btn-register" onclick="goStep(3)" style="flex:1">Continue <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="step3" style="display:none">
+      <div class="form-group">
+        <label>Create Password</label>
+        <input type="password" id="regPass" placeholder="Min 8 characters" class="form-input" style="background:var(--off-white)">
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="regPass2" placeholder="Re-enter password" class="form-input" style="background:var(--off-white)">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:13px;color:var(--muted)">
+        <input type="checkbox" id="agreeTerms" style="accent-color:var(--gold)">
+        <label for="agreeTerms">I agree to GHRCEM's <a href="#" style="color:var(--gold)">Terms & Privacy Policy</a></label>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-outline" onclick="goStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+        <button class="btn-register" onclick="doRegister()" style="flex:1"><i class="fas fa-check"></i> Create Account</button>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div class="success-state" id="successState">
+      <div class="success-icon">🎓</div>
+      <h3 style="font-family:'Playfair Display',serif;color:var(--navy);font-size:22px;margin-bottom:8px">Registration Successful!</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:24px">Your account has been created. Please wait for admin approval before logging in.</p>
+      <a href="index.html" class="btn btn-gold" style="text-decoration:none;display:inline-flex">Go to Login</a>
+    </div>
+
+    <div style="text-align:center;margin-top:20px;font-size:13px;color:var(--muted)">
+      Already have an account? <a href="index.html" style="color:var(--gold);font-weight:600;">Login here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function goStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('step'+i).style.display = i===n ? 'block' : 'none';
+    const s = document.getElementById('s'+i);
+    if(i < n) { s.className='step done'; s.innerHTML='<i class="fas fa-check" style="font-size:10px"></i>'; }
+    else if(i===n) { s.className='step active'; s.textContent=i; }
+    else { s.className='step pending'; s.textContent=i; }
+    if(i < 3) { document.getElementById('sl'+i).className = i < n ? 'step-line done' : 'step-line'; }
+  });
+}
+
+function doRegister() {
+  const p1 = document.getElementById('regPass').value;
+  const p2 = document.getElementById('regPass2').value;
+  const agree = document.getElementById('agreeTerms').checked;
+  if(p1.length < 8) { alert('Password must be at least 8 characters'); return; }
+  if(p1 !== p2) { alert('Passwords do not match'); return; }
+  if(!agree) { alert('Please agree to the terms and conditions'); return; }
+  [1,2,3].forEach(i => document.getElementById('step'+i).style.display='none');
+  document.getElementById('successState').style.display='block';
+}
+</script>
+</body>
+</html>

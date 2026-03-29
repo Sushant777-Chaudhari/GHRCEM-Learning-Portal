@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — GHRCEM Learning</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ══════════════ TOPNAV ══════════════ -->
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="nav-logo">G</div>
+    <div class="nav-title">
+      <h1>GHRCEM Learning</h1>
+      <span id="navRoleLabel">Portal</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-notif" onclick="showToast('📢 3 new notifications')">
+      <i class="fas fa-bell"></i>
+      <div class="notif-dot"></div>
+    </div>
+    <div class="nav-user">
+      <div class="nav-avatar" id="navAvatar">A</div>
+      <div class="nav-user-info">
+        <div class="u-name" id="navName">Admin User</div>
+        <div class="u-role" id="navRole">Administrator</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<!-- ══════════════ APP SHELL ══════════════ -->
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar"></div>
+
+  <!-- MAIN -->
+  <div class="main-content" id="mainContent"></div>
+</div>
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- Add Subject Modal -->
+<div class="modal-overlay" id="subjectModal">
+  <div class="modal">
+    <div class="modal-title">📚 Add New Subject</div>
+    <div class="form-row">
+      <div class="form-group"><label>Subject Name</label><input type="text" placeholder="Data Structures & Algorithms"></div>
+      <div class="form-group"><label>Subject Code</label><input type="text" placeholder="CS301"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Department</label>
+        <select><option>Computer Engineering</option><option>IT</option><option>Mechanical</option><option>Civil</option></select>
+      </div>
+      <div class="form-group"><label>Year</label>
+        <select><option>First Year</option><option>Second Year</option><option>Third Year</option><option>Final Year</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Credits</label><input type="number" placeholder="4"></div>
+      <div class="form-group"><label>Assign Teacher</label>
+        <select><option>Prof. S. Kulkarni</option><option>Dr. A. Mehta</option><option>Prof. R. Joshi</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('subjectModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="closeModal('subjectModal');showToast('✅ Subject added successfully!')"><i class="fas fa-plus"></i> Add Subject</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Material Modal -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal">
+    <div class="modal-title">📤 Upload Study Material</div>
+    <div class="form-group"><label>Subject</label>
+      <select><option>Data Structures (CS301)</option><option>Computer Networks (CS401)</option><option>DBMS (CS302)</option></select>
+    </div>
+    <div class="form-group"><label>Material Type</label>
+      <select><option>Lecture Notes</option><option>Assignment</option><option>Previous Year Paper</option><option>Reference Book</option><option>Video Link</option></select>
+    </div>
+    <div class="form-group"><label>Title</label><input type="text" placeholder="Unit 3 - Trees and Graphs"></div>
+    <div class="upload-zone" onclick="showToast('📂 File picker opened')">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p><b>Click to upload</b> or drag & drop</p>
+      <p style="font-size:11px;margin-top:4px">PDF, DOC, PPT, Video (max 50MB)</p>
+    </div>
+    <div class="form-group" style="margin-top:14px"><label>Description (optional)</label>
+      <textarea rows="3" placeholder="Brief description of this material..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('uploadModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="closeModal('uploadModal');showToast('✅ Material uploaded!')"><i class="fas fa-upload"></i> Upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Assignment Modal -->
+<div class="modal-overlay" id="assignmentModal">
+  <div class="modal">
+    <div class="modal-title">📝 Create Assignment</div>
+    <div class="form-group"><label>Subject</label>
+      <select><option>Data Structures (CS301)</option><option>Computer Networks (CS401)</option><option>DBMS (CS302)</option></select>
+    </div>
+    <div class="form-group"><label>Assignment Title</label>
+      <input type="text" placeholder="Assignment 3: Binary Trees Implementation">
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Due Date</label><input type="date"></div>
+      <div class="form-group"><label>Max Marks</label><input type="number" placeholder="25"></div>
+    </div>
+    <div class="form-group"><label>Instructions</label>
+      <textarea rows="4" placeholder="Write the assignment instructions here..."></textarea>
+    </div>
+    <div class="form-group"><label>Attach File (optional)</label>
+      <div class="upload-zone" style="padding:16px" onclick="showToast('📂 File picker opened')">
+        <i class="fas fa-paperclip" style="font-size:20px;margin-bottom:6px"></i>
+        <p style="font-size:12px">Attach question paper / reference</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('assignmentModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="closeModal('assignmentModal');showToast('✅ Assignment created!')"><i class="fas fa-plus"></i> Create Assignment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Student Modal (Admin) -->
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal">
+    <div class="modal-title">👤 Add New User</div>
+    <div class="form-row">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Rahul Patil"></div>
+      <div class="form-group"><label>Role</label>
+        <select><option>Student</option><option>Teacher</option><option>Admin</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Email</label><input type="email" placeholder="user@ghrcem.edu"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" placeholder="+91 98765 43210"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Department</label>
+        <select><option>Computer Engineering</option><option>IT</option><option>Mechanical</option></select>
+      </div>
+      <div class="form-group"><label>Roll No / Emp ID</label><input type="text" placeholder="CE2024001"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addUserModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="closeModal('addUserModal');showToast('✅ User added and credentials sent!')"><i class="fas fa-user-plus"></i> Add User</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span class="toast-icon" id="toastIcon">✅</span><span id="toastMsg">Done!</span></div>
+
+<script>
+// ══════════════ STATE ══════════════
+let currentRole = '';
+let currentPanel = '';
+
+const sidebarConfig = {
+  admin: [
+    { section: 'Main' },
+    { id:'dashboard', icon:'fa-gauge', label:'Dashboard' },
+    { id:'notices', icon:'fa-bullhorn', label:'Notice Board', badge:'2' },
+    { section: 'Academic' },
+    { id:'subjects', icon:'fa-book', label:'Subjects' },
+    { id:'students', icon:'fa-user-graduate', label:'Students' },
+    { id:'teachers', icon:'fa-chalkboard-teacher', label:'Teachers' },
+    { id:'materials', icon:'fa-folder-open', label:'Materials' },
+    { id:'assignments', icon:'fa-clipboard-list', label:'Assignments' },
+    { section: 'Reports' },
+    { id:'attendance', icon:'fa-calendar-check', label:'Attendance' },
+    { id:'grades', icon:'fa-chart-bar', label:'Grades & Results' },
+    { id:'timetable', icon:'fa-clock', label:'Timetable' },
+  ],
+  teacher: [
+    { section: 'Main' },
+    { id:'dashboard', icon:'fa-gauge', label:'Dashboard' },
+    { id:'notices', icon:'fa-bullhorn', label:'Notice Board' },
+    { section: 'My Classes' },
+    { id:'mysubjects', icon:'fa-book', label:'My Subjects' },
+    { id:'mystudents', icon:'fa-users', label:'My Students' },
+    { id:'materials', icon:'fa-folder-open', label:'Upload Material' },
+    { id:'assignments', icon:'fa-clipboard-list', label:'Assignments', badge:'3' },
+    { section: 'Records' },
+    { id:'attendance', icon:'fa-calendar-check', label:'Attendance' },
+    { id:'grades', icon:'fa-chart-bar', label:'Marks Entry' },
+    { id:'timetable', icon:'fa-clock', label:'Timetable' },
+  ],
+  student: [
+    { section: 'Main' },
+    { id:'dashboard', icon:'fa-gauge', label:'Dashboard' },
+    { id:'notices', icon:'fa-bullhorn', label:'Notice Board', badge:'2' },
+    { section: 'Academics' },
+    { id:'mysubjects', icon:'fa-book', label:'My Subjects' },
+    { id:'materials', icon:'fa-folder-open', label:'Study Material' },
+    { id:'assignments', icon:'fa-clipboard-list', label:'Assignments', badge:'2' },
+    { section: 'Performance' },
+    { id:'attendance', icon:'fa-calendar-check', label:'My Attendance' },
+    { id:'grades', icon:'fa-chart-bar', label:'My Grades' },
+    { id:'timetable', icon:'fa-clock', label:'Timetable' },
+  ]
+};
+
+// ══════════════ INIT ══════════════
+window.addEventListener('DOMContentLoaded', () => {
+  const role = localStorage.getItem('ghrcem_role');
+  const name = localStorage.getItem('ghrcem_name') || 'User';
+  if (!role) { window.location.href='index.html'; return; }
+
+  currentRole = role;
+  const roleLabels = { admin:'Administrator', teacher:'Faculty', student:'Student' };
+  document.getElementById('navName').textContent = name;
+  document.getElementById('navRole').textContent = roleLabels[role] || role;
+  document.getElementById('navAvatar').textContent = name[0].toUpperCase();
+  document.getElementById('navRoleLabel').textContent = roleLabels[role] + ' Portal';
+
+  buildSidebar();
+  showPanel('dashboard');
+});
+
+function logout() {
+  localStorage.removeItem('ghrcem_role');
+  localStorage.removeItem('ghrcem_name');
+  localStorage.removeItem('ghrcem_email');
+  window.location.href = 'index.html';
+}
+
+// ══════════════ SIDEBAR ══════════════
+function buildSidebar() {
+  const cfg = sidebarConfig[currentRole] || [];
+  let html = '';
+  cfg.forEach(item => {
+    if (item.section) {
+      html += `<div class="sidebar-label">${item.section}</div>`;
+    } else {
+      html += `<button class="sidebar-btn" id="sb-${item.id}" onclick="showPanel('${item.id}')">
+        <i class="fas ${item.icon}"></i>${item.label}
+        ${item.badge ? `<span class="s-badge">${item.badge}</span>` : ''}
+      </button>`;
+    }
+  });
+  html += `<div style="margin-top:auto;border-top:1px solid var(--border);padding-top:16px;margin-top:32px"></div>
+  <button class="sidebar-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i>Logout</button>`;
+  document.getElementById('sidebar').innerHTML = html;
+}
+
+function showPanel(name) {
+  currentPanel = name;
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('sb-'+name);
+  if (btn) btn.classList.add('active');
+  document.getElementById('mainContent').innerHTML = buildPanel(name);
+  window.scrollTo(0,0);
+}
+
+// ══════════════ PANEL BUILDER ══════════════
+function buildPanel(name) {
+  switch(name) {
+    case 'dashboard':    return dashPanel();
+    case 'notices':      return noticePanel();
+    case 'subjects':     return subjectsPanel();
+    case 'mysubjects':   return mySubjectsPanel();
+    case 'students':     return studentsPanel();
+    case 'mystudents':   return myStudentsPanel();
+    case 'teachers':     return teachersPanel();
+    case 'materials':    return materialsPanel();
+    case 'assignments':  return assignmentsPanel();
+    case 'attendance':   return attendancePanel();
+    case 'grades':       return gradesPanel();
+    case 'timetable':    return timetablePanel();
+    default: return `<div class="empty-state"><i class="fas fa-tools"></i>Coming soon</div>`;
+  }
+}
+
+// ──────────── DASHBOARD ────────────
+function dashPanel() {
+  const r = currentRole;
+
+  if (r === 'admin') return `
+  <div class="page">
+    <div class="section-hdr">
+      <div>
+        <div class="section-title">Admin Dashboard</div>
+        <div style="font-size:13px;color:var(--muted)">Welcome back, ${localStorage.getItem('ghrcem_name')} · ${new Date().toDateString()}</div>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-outline" onclick="showToast('📄 Generating report...')"><i class="fas fa-download"></i> Export Report</button>
+        <button class="btn btn-gold" onclick="document.getElementById('addUserModal').classList.add('open')"><i class="fas fa-user-plus"></i> Add User</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(15,28,63,.08)"><i class="fas fa-users" style="color:var(--navy)"></i></div>
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value">1,248</div>
+        <div class="stat-sub">↑ 48 new this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(200,146,42,.12)"><i class="fas fa-chalkboard-teacher" style="color:var(--gold)"></i></div>
+        <div class="stat-label">Total Teachers</div>
+        <div class="stat-value">86</div>
+        <div class="stat-sub">12 departments</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(22,163,74,.1)"><i class="fas fa-book" style="color:var(--green)"></i></div>
+        <div class="stat-label">Active Subjects</div>
+        <div class="stat-value">142</div>
+        <div class="stat-sub">Across 4 years</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(220,38,38,.08)"><i class="fas fa-clipboard-list" style="color:var(--red)"></i></div>
+        <div class="stat-label">Pending Approvals</div>
+        <div class="stat-value">14</div>
+        <div class="stat-sub">Registrations pending</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-chart-bar" style="color:var(--gold)"></i> Department-wise Enrollment</div>
+        ${[
+          ['Computer Engineering','CE',342,'#0f1c3f'],
+          ['Information Technology','IT',298,'#c8922a'],
+          ['Mechanical Engg','ME',224,'#16a34a'],
+          ['Civil Engineering','CE',186,'#2563eb'],
+          ['Electronics & TC','EXTC',198,'#7c3aed'],
+        ].map(([dept,code,count,color])=>`
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div style="width:36px;height:36px;border-radius:8px;background:${color}18;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:${color}">${code}</div>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px"><span>${dept}</span><b>${count}</b></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(count/342*100)}%;background:${color}"></div></div>
+          </div>
+        </div>`).join('')}
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-clock" style="color:var(--gold)"></i> Recent Activity</div>
+        <div class="timeline-item">
+          <div class="tl-dot" style="background:var(--green)"><i class="fas fa-user-plus" style="font-size:11px"></i></div>
+          <div><div style="font-weight:600;font-size:13px">15 new student registrations</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Today, 09:30 AM</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot" style="background:var(--gold)"><i class="fas fa-upload" style="font-size:11px"></i></div>
+          <div><div style="font-weight:600;font-size:13px">Prof. Kulkarni uploaded CS301 notes</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Today, 08:15 AM</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot" style="background:var(--navy)"><i class="fas fa-clipboard-list" style="font-size:11px"></i></div>
+          <div><div style="font-weight:600;font-size:13px">Assignment deadline: CS401 — Tomorrow</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Yesterday, 05:00 PM</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot" style="background:#7c3aed"><i class="fas fa-bullhorn" style="font-size:11px"></i></div>
+          <div><div style="font-weight:600;font-size:13px">Notice: Mid-term exam schedule published</div><div style="font-size:11px;color:var(--muted);margin-top:2px">2 days ago</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="section-hdr">
+        <div class="section-title" style="font-size:18px">Pending Registration Approvals</div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Department</th><th>Applied</th><th>Action</th></tr></thead>
+          <tbody>
+            ${[
+              ['Ananya Desai','ananya@email.com','Student','Computer Engg','Today'],
+              ['Raj Mehta','raj.m@email.com','Student','IT','Today'],
+              ['Pooja Joshi','pooja.j@email.com','Student','Mechanical','Yesterday'],
+              ['Dr. Vikram Rao','vikram.r@ghrcem.edu','Teacher','Civil Engg','Yesterday'],
+            ].map(([n,e,r,d,t])=>`
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar">${n[0]}</div><b>${n}</b></div></td>
+              <td>${e}</td>
+              <td><span class="pill ${r==='Teacher'?'pill-blue':'pill-gold'}">${r}</span></td>
+              <td>${d}</td>
+              <td style="color:var(--muted)">${t}</td>
+              <td>
+                <button class="btn btn-success btn-sm" onclick="showToast('✅ ${n} approved!')"><i class="fas fa-check"></i> Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="showToast('❌ Request rejected')"><i class="fas fa-times"></i></button>
+              </td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+
+  if (r === 'teacher') return `
+  <div class="page">
+    <div class="section-hdr">
+      <div>
+        <div class="section-title">Teacher Dashboard</div>
+        <div style="font-size:13px;color:var(--muted)">${localStorage.getItem('ghrcem_name')} · Computer Engineering · ${new Date().toDateString()}</div>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-outline" onclick="document.getElementById('uploadModal').classList.add('open')"><i class="fas fa-upload"></i> Upload Material</button>
+        <button class="btn btn-gold" onclick="document.getElementById('assignmentModal').classList.add('open')"><i class="fas fa-plus"></i> New Assignment</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(15,28,63,.08)"><i class="fas fa-users" style="color:var(--navy)"></i></div>
+        <div class="stat-label">My Students</div>
+        <div class="stat-value">186</div>
+        <div class="stat-sub">3 classes assigned</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(200,146,42,.12)"><i class="fas fa-book" style="color:var(--gold)"></i></div>
+        <div class="stat-label">My Subjects</div>
+        <div class="stat-value">3</div>
+        <div class="stat-sub">This semester</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(22,163,74,.1)"><i class="fas fa-clipboard-check" style="color:var(--green)"></i></div>
+        <div class="stat-label">Pending Submissions</div>
+        <div class="stat-value">24</div>
+        <div class="stat-sub">To be graded</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(37,99,235,.08)"><i class="fas fa-folder-open" style="color:#2563eb"></i></div>
+        <div class="stat-label">Uploaded Materials</div>
+        <div class="stat-value">38</div>
+        <div class="stat-sub">This semester</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-book" style="color:var(--gold)"></i> My Subjects</div>
+        ${[
+          {name:'Data Structures & Algo',code:'CS301',year:'SE',students:64,progress:65},
+          {name:'Computer Networks',code:'CS401',year:'TE',students:72,progress:48},
+          {name:'Operating Systems',code:'CS302',year:'SE',students:50,progress:72},
+        ].map(s=>`
+        <div style="padding:14px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:600;font-size:14px">${s.name}</div>
+              <div style="font-size:11px;color:var(--muted)">${s.code} · ${s.year} · ${s.students} students</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="showPanel('mysubjects')">View</button>
+          </div>
+          <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" style="width:${s.progress}%"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">${s.progress}% syllabus covered</div>
+        </div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-clock" style="color:var(--gold)"></i> Today's Schedule</div>
+        ${[
+          {time:'08:30–09:30',sub:'Data Structures',room:'Lab 3, B-Block',type:'Practical'},
+          {time:'10:30–11:30',sub:'Computer Networks',room:'Room 204, A-Block',type:'Lecture'},
+          {time:'12:30–01:30',sub:'OS Tutorial',room:'Room 108, A-Block',type:'Tutorial'},
+          {time:'03:00–04:00',sub:'Project Guidance',room:'Faculty Cabin',type:'Guidance'},
+        ].map(l=>`
+        <div style="display:flex;gap:12px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);min-width:90px">${l.time}</div>
+          <div>
+            <div style="font-weight:600;font-size:13px">${l.sub}</div>
+            <div style="font-size:11px;color:var(--muted)">${l.room}</div>
+          </div>
+          <span class="chip" style="margin-left:auto;align-self:flex-start">${l.type}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+
+  // Student dashboard
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div>
+        <div class="section-title">Student Dashboard</div>
+        <div style="font-size:13px;color:var(--muted)">${localStorage.getItem('ghrcem_name')} · SE Computer Engineering · ${new Date().toDateString()}</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(15,28,63,.08)"><i class="fas fa-calendar-check" style="color:var(--navy)"></i></div>
+        <div class="stat-label">Attendance</div>
+        <div class="stat-value" style="color:var(--green)">84%</div>
+        <div class="stat-sub">This semester</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(200,146,42,.12)"><i class="fas fa-book" style="color:var(--gold)"></i></div>
+        <div class="stat-label">Subjects</div>
+        <div class="stat-value">6</div>
+        <div class="stat-sub">Current semester</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(220,38,38,.08)"><i class="fas fa-clipboard-list" style="color:var(--red)"></i></div>
+        <div class="stat-label">Pending Tasks</div>
+        <div class="stat-value">3</div>
+        <div class="stat-sub">2 due this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(22,163,74,.1)"><i class="fas fa-star" style="color:var(--green)"></i></div>
+        <div class="stat-label">Current CGPA</div>
+        <div class="stat-value">8.4</div>
+        <div class="stat-sub">↑ from 8.1 last sem</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-title"><i class="fas fa-clipboard-list" style="color:var(--gold)"></i> Pending Assignments</div>
+          ${[
+            {sub:'Data Structures (CS301)',title:'Binary Tree Implementation',due:'Tomorrow',urgent:true},
+            {sub:'Computer Networks (CS401)',title:'OSI Model Analysis',due:'3 days left',urgent:false},
+            {sub:'DBMS (CS302)',title:'ER Diagram Design',due:'1 week left',urgent:false},
+          ].map(a=>`
+          <div class="asgn-card">
+            <div class="asgn-icon">📝</div>
+            <div class="asgn-info">
+              <div class="asgn-title">${a.title}</div>
+              <div class="asgn-meta">${a.sub}</div>
+            </div>
+            <div>
+              <div class="asgn-due ${a.urgent?'urgent':'ok'}">${a.due}</div>
+              <button class="btn btn-sm btn-primary" style="margin-top:6px" onclick="showToast('📎 Submission opened')">Submit</button>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-title"><i class="fas fa-clock" style="color:var(--gold)"></i> Today's Classes</div>
+          ${[
+            {time:'08:30',sub:'Data Structures',room:'B-202',teacher:'Prof. Kulkarni',type:'Lecture'},
+            {time:'10:30',sub:'Computer Networks',room:'Lab 3',teacher:'Dr. Mehta',type:'Lab'},
+            {time:'12:30',sub:'Mathematics III',room:'A-101',teacher:'Prof. Sharma',type:'Lecture'},
+            {time:'02:30',sub:'OS Lab',room:'Lab 1',teacher:'Prof. Joshi',type:'Lab'},
+          ].map(c=>`
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);min-width:50px">${c.time}</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:13px">${c.sub}</div>
+              <div style="font-size:11px;color:var(--muted)">${c.room} · ${c.teacher}</div>
+            </div>
+            <span class="chip">${c.type}</span>
+          </div>`).join('')}
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-bullhorn" style="color:var(--gold)"></i> Latest Notices</div>
+          <div class="notice-item">
+            <div class="notice-title">Mid-semester exam schedule released</div>
+            <div class="notice-date">Today · Academic Office</div>
+          </div>
+          <div class="notice-item" style="border-left-color:#2563eb;background:rgba(37,99,235,.04)">
+            <div class="notice-title">Last date for assignment submission</div>
+            <div class="notice-date">Yesterday · Prof. Kulkarni</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ──────────── NOTICES ────────────
+function noticePanel() {
+  const notices = [
+    {title:'Mid-Semester Examination Schedule — Nov 2024',date:'Today',from:'Academic Office',type:'Exam',imp:true},
+    {title:'Cultural Fest Registration Open — Resonance 2024',date:'Yesterday',from:'Student Affairs',type:'Event',imp:false},
+    {title:'Industry Visit — Infosys Pune on 15th Nov',date:'2 days ago',from:'Placement Cell',type:'Placement',imp:false},
+    {title:'Assignment Submission Deadline Extended for CS401',date:'3 days ago',from:'Prof. S. Kulkarni',type:'Academic',imp:false},
+    {title:'College Holiday on account of Diwali',date:'1 week ago',from:'Principal Office',type:'Holiday',imp:false},
+    {title:'Scholarship Application Last Date — 30th Nov',date:'1 week ago',from:'Finance Office',type:'Finance',imp:true},
+  ];
+  const colors = {Exam:'pill-red',Event:'pill-blue',Placement:'pill-green',Academic:'pill-gold',Holiday:'pill-gray',Finance:'pill-blue'};
+
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div class="section-title">📢 Notice Board</div>
+      ${currentRole==='admin'?`<button class="btn btn-gold" onclick="showToast('📝 Notice editor opened')"><i class="fas fa-plus"></i> Post Notice</button>`:''}
+    </div>
+    <div class="card">
+      ${notices.map(n=>`
+      <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:flex-start">
+        <div style="width:40px;height:40px;border-radius:10px;background:${n.imp?'rgba(220,38,38,.1)':'rgba(200,146,42,.1)'};display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${n.imp?'🔴':'📌'}</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <div style="font-weight:600;font-size:14px">${n.title}</div>
+            <span class="pill ${colors[n.type]}">${n.type}</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted)"><i class="fas fa-user"></i> ${n.from} &nbsp;·&nbsp; <i class="fas fa-clock"></i> ${n.date}</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="showToast('📄 Opening notice...')">View</button>
+        ${currentRole==='admin'?`<button class="btn btn-danger btn-sm" onclick="showToast('🗑️ Notice deleted')"><i class="fas fa-trash"></i></button>`:''}
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ──────────── SUBJECTS ────────────
+function subjectsPanel() {
+  const subjects = [
+    {name:'Data Structures & Algorithms',code:'CS301',dept:'Computer Engg',year:'SE',teacher:'Prof. S. Kulkarni',students:186,credits:4,color:'#0f1c3f'},
+    {name:'Computer Networks',code:'CS401',dept:'Computer Engg',year:'TE',teacher:'Dr. A. Mehta',students:172,credits:4,color:'#c8922a'},
+    {name:'Database Management Systems',code:'CS302',dept:'Computer Engg',year:'SE',teacher:'Prof. R. Joshi',students:186,credits:3,color:'#16a34a'},
+    {name:'Operating Systems',code:'CS303',dept:'Computer Engg',year:'SE',teacher:'Prof. S. Kulkarni',students:184,credits:4,color:'#7c3aed'},
+    {name:'Theory of Computation',code:'CS402',dept:'Computer Engg',year:'TE',teacher:'Dr. V. Patil',students:170,credits:3,color:'#2563eb'},
+    {name:'Software Engineering',code:'CS501',dept:'Computer Engg',year:'BE',teacher:'Prof. K. Sharma',students:156,credits:4,color:'#dc2626'},
+  ];
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div class="section-title">📚 Subject Management</div>
+      <button class="btn btn-gold" onclick="document.getElementById('subjectModal').classList.add('open')"><i class="fas fa-plus"></i> Add Subject</button>
+    </div>
+    <div class="grid-3">
+      ${subjects.map(s=>`
+      <div class="subject-card" onclick="showToast('📖 Opening ${s.name}')">
+        <div class="subject-card-top">
+          <div>
+            <div class="subject-name">${s.name}</div>
+            <div class="subject-code">${s.code} · ${s.credits} Credits</div>
+          </div>
+          <div class="subject-icon" style="background:${s.color}18"><i class="fas fa-book" style="color:${s.color}"></i></div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px"><i class="fas fa-user"></i> ${s.teacher}</div>
+        <div style="font-size:12px;color:var(--muted)"><i class="fas fa-layer-group"></i> ${s.year} · ${s.dept}</div>
+        <div class="subject-stats">
+          <span><i class="fas fa-users"></i> ${s.students} students</span>
+          <span><i class="fas fa-folder"></i> 12 materials</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${40+Math.floor(Math.random()*50)}%;background:${s.color}"></div></div>
+        ${currentRole==='admin'?`<div style="display:flex;gap:6px;margin-top:10px">
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();showToast('✏️ Edit ${s.code}')"><i class="fas fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();showToast('🗑️ Deleted')"><i class="fas fa-trash"></i></button>
+        </div>`:''}
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ──────────── MY SUBJECTS (Teacher/Student) ────────────
+function mySubjectsPanel() {
+  return subjectsPanel();
+}
+
+// ──────────── STUDENTS ────────────
+function studentsPanel() {
+  const students = [
+    {name:'Rahul Patil',roll:'CE2024001',email:'rahul.p@ghrcem.edu',year:'SE',dept:'CE',att:84,cgpa:8.4,status:'Active'},
+    {name:'Priya Sharma',roll:'CE2024002',email:'priya.s@ghrcem.edu',year:'SE',dept:'CE',att:92,cgpa:9.1,status:'Active'},
+    {name:'Aditya Kumar',roll:'CE2024003',email:'aditya.k@ghrcem.edu',year:'TE',dept:'CE',att:71,cgpa:7.6,status:'Active'},
+    {name:'Sneha Joshi',roll:'CE2024004',email:'sneha.j@ghrcem.edu',year:'BE',dept:'CE',att:89,cgpa:8.8,status:'Active'},
+    {name:'Rohan Desai',roll:'IT2024001',email:'rohan.d@ghrcem.edu',year:'FE',dept:'IT',att:55,cgpa:6.2,status:'Warning'},
+    {name:'Ankita More',roll:'CE2024005',email:'ankita.m@ghrcem.edu',year:'TE',dept:'CE',att:95,cgpa:9.4,status:'Active'},
+  ];
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div class="section-title">👨‍🎓 Student Directory</div>
+      <div class="section-actions">
+        <button class="btn btn-outline"><i class="fas fa-filter"></i> Filter</button>
+        <button class="btn btn-gold" onclick="document.getElementById('addUserModal').classList.add('open')"><i class="fas fa-user-plus"></i> Add Student</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Student</th><th>Roll No.</th><th>Year</th><th>Dept</th><th>Attendance</th><th>CGPA</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${students.map(s=>`
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="avatar">${s.name[0]}</div>
+                <div><div style="font-weight:600">${s.name}</div><div style="font-size:11px;color:var(--muted)">${s.email}</div></div>
+              </div>
+            </td>
+            <td>${s.roll}</td>
+            <td><span class="chip">${s.year}</span></td>
+            <td>${s.dept}</td>
+            <td>
+              <span style="font-weight:700;color:${s.att>=75?'var(--green)':s.att>=60?'var(--gold)':'var(--red)'}">${s.att}%</span>
+            </td>
+            <td><b>${s.cgpa}</b></td>
+            <td><span class="pill ${s.status==='Active'?'pill-green':'pill-red'}"><span class="dot"></span>${s.status}</span></td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="showToast('👁️ Viewing ${s.name}')"><i class="fas fa-eye"></i></button>
+              <button class="btn btn-outline btn-sm" onclick="showToast('✉️ Message sent to ${s.name}')"><i class="fas fa-envelope"></i></button>
+              ${currentRole==='admin'?`<button class="btn btn-danger btn-sm" onclick="showToast('❌ ${s.name} removed')"><i class="fas fa-trash"></i></button>`:''}
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function myStudentsPanel() { return studentsPanel(); }
+
+// ──────────── TEACHERS ────────────
+function teachersPanel() {
+  const teachers = [
+    {name:'Prof. S. Kulkarni',id:'T001',email:'s.kulkarni@ghrcem.edu',dept:'Computer Engg',subjects:3,exp:'8 yrs',status:'Active'},
+    {name:'Dr. A. Mehta',id:'T002',email:'a.mehta@ghrcem.edu',dept:'Computer Engg',subjects:2,exp:'12 yrs',status:'Active'},
+    {name:'Prof. R. Joshi',id:'T003',email:'r.joshi@ghrcem.edu',dept:'Computer Engg',subjects:3,exp:'6 yrs',status:'Active'},
+    {name:'Dr. V. Patil',id:'T004',email:'v.patil@ghrcem.edu',dept:'IT',subjects:2,exp:'15 yrs',status:'Active'},
+    {name:'Prof. K. Sharma',id:'T005',email:'k.sharma@ghrcem.edu',dept:'Mechanical',subjects:4,exp:'10 yrs',status:'On Leave'},
+  ];
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div class="section-title">👩‍🏫 Faculty Directory</div>
+      <button class="btn btn-gold" onclick="document.getElementById('addUserModal').classList.add('open')"><i class="fas fa-user-plus"></i> Add Teacher</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Teacher</th><th>ID</th><th>Department</th><th>Subjects</th><th>Experience</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${teachers.map(t=>`
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:10px"><div class="avatar" style="background:linear-gradient(135deg,var(--navy3),var(--navy))">${t.name[5]}</div><div><div style="font-weight:600">${t.name}</div><div style="font-size:11px;color:var(--muted)">${t.email}</div></div></div></td>
+            <td><span class="chip">${t.id}</span></td>
+            <td>${t.dept}</td>
+            <td><b>${t.subjects}</b> subjects</td>
+            <td>${t.exp}</td>
+            <td><span class="pill ${t.status==='Active'?'pill-green':'pill-gold'}"><span class="dot"></span>${t.status}</span></td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="showToast('👁️ ${t.name} profile')"><i class="fas fa-eye"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="showToast('🗑️ Removed')"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ──────────── MATERIALS ────────────
+function materialsPanel() {
+  const mats = [
+    {title:'Unit 3 — Trees and Graphs',sub:'Data Structures (CS301)',type:'📄 PDF',size:'2.4 MB',by:'Prof. Kulkarni',date:'Today'},
+    {title:'CN Lab Manual Sem V',sub:'Computer Networks (CS401)',type:'📄 PDF',size:'5.1 MB',by:'Dr. Mehta',date:'Yesterday'},
+    {title:'DBMS Assignment 2 — ER Diagrams',sub:'DBMS (CS302)',type:'📝 DOC',size:'1.2 MB',by:'Prof. Joshi',date:'2 days ago'},
+    {title:'OS Previous Year Papers 2019–2023',sub:'Operating Systems (CS303)',type:'📦 ZIP',size:'8.4 MB',by:'Prof. Kulkarni',date:'3 days ago'},
+    {title:'Software Engineering Reference Book',sub:'SE (CS501)',type:'📄 PDF',size:'12.8 MB',by:'Prof. Sharma',date:'1 week ago'},
+    {title:'Data Structures Lecture Slides Unit 1-2',sub:'DS (CS301)',type:'📊 PPT',size:'4.2 MB',by:'Prof. Kulkarni',date:'1 week ago'},
+  ];
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div class="section-title">📁 Study Materials</div>
+      ${currentRole!=='student'?`<button class="btn btn-gold" onclick="document.getElementById('uploadModal').classList.add('open')"><i class="fas fa-upload"></i> Upload Material</button>`:''}
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+      ${['All','PDF','DOC','PPT','Video','ZIP'].map((f,i)=>`
+        <button class="btn ${i===0?'btn-primary':'btn-outline'} btn-sm" onclick="showToast('🔍 Filtering: ${f}')">${f}</button>`).join('')}
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Title</th><th>Subject</th><th>Type</th><th>Size</th><th>Uploaded By</th><th>Date</th><th>Action</th></tr></thead>
+        <tbody>
+          ${mats.map(m=>`
+          <tr>
+            <td><b>${m.title}</b></td>
+            <td style="color:var(--muted);font-size:12px">${m.sub}</td>
+            <td>${m.type}</td>
+            <td>${m.size}</td>
+            <td>${m.by}</td>
+            <td style="color:var(--muted)">${m.date}</td>
+            <td>
+              <button class="btn btn-gold btn-sm" onclick="showToast('⬇️ Downloading ${m.title}')"><i class="fas fa-download"></i></button>
+              ${currentRole!=='student'?`<button class="btn btn-danger btn-sm" onclick="showToast('🗑️ Deleted')"><i class="fas fa-trash"></i></button>`:''}
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ──────────── ASSIGNMENTS ────────────
+function assignmentsPanel() {
+  const assignments = [
+    {title:'Binary Tree Implementation',sub:'Data Structures (CS301)',due:'2024-11-10',max:25,submitted:48,total:64,status:'Active'},
+    {title:'OSI Model Analysis Report',sub:'Computer Networks (CS401)',due:'2024-11-12',max:20,submitted:60,total:72,status:'Active'},
+    {title:'ER Diagram for Library System',sub:'DBMS (CS302)',due:'2024-11-18',max:30,submitted:12,total:64,status:'Active'},
+    {title:'Process Scheduling Algorithms',sub:'Operating Systems (CS303)',due:'2024-10-30',max:25,submitted:64,total:64,status:'Closed'},
+    {title:'Sorting Algorithm Comparison',sub:'Data Structures (CS301)',due:'2024-10-20',max:20,submitted:62,total:64,status:'Closed'},
+  ];
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div class="section-title">📝 Assignments</div>
+      ${currentRole!=='student'?`<button class="btn btn-gold" onclick="document.getElementById('assignmentModal').classList.add('open')"><i class="fas fa-plus"></i> Create Assignment</button>`:''}
+    </div>
+    ${assignments.map(a=>`
+    <div class="asgn-card">
+      <div class="asgn-icon" style="font-size:22px">📋</div>
+      <div class="asgn-info">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="asgn-title">${a.title}</div>
+          <span class="pill ${a.status==='Active'?'pill-green':'pill-gray'}">${a.status}</span>
+        </div>
+        <div class="asgn-meta">${a.sub} &nbsp;·&nbsp; Max Marks: ${a.max}</div>
+        ${currentRole!=='student'?`
+        <div style="margin-top:8px">
+          <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(a.submitted/a.total*100)}%"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${a.submitted}/${a.total} submitted (${Math.round(a.submitted/a.total*100)}%)</div>
+        </div>`:''}
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="asgn-due ${new Date(a.due) > new Date() ? 'ok':'pill-red'}" style="margin-bottom:8px">Due: ${new Date(a.due).toDateString()}</div>
+        ${currentRole==='student'?`<button class="btn btn-gold btn-sm" onclick="showToast('📤 Submission window opened')"><i class="fas fa-upload"></i> Submit</button>`:''}
+        ${currentRole!=='student'?`
+        <div style="display:flex;gap:6px;justify-content:flex-end">
+          <button class="btn btn-outline btn-sm" onclick="showToast('📋 Viewing submissions')"><i class="fas fa-eye"></i> Submissions</button>
+          <button class="btn btn-danger btn-sm" onclick="showToast('🗑️ Assignment deleted')"><i class="fas fa-trash"></i></button>
+        </div>`:''}
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ──────────── ATTENDANCE ────────────
+function attendancePanel() {
+  const month = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const days = Array.from({length:31},(_,i)=>{
+    const r = Math.random();
+    return r>0.8?'absent':r>0.15?'present':'';
+  });
+  days[new Date().getDate()-1] = 'today';
+
+  if (currentRole === 'student') {
+    return `
+    <div class="page">
+      <div class="section-hdr"><div class="section-title">📅 My Attendance</div></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-calendar" style="color:var(--gold)"></i> November 2024</div>
+          <div style="display:flex;gap:4px;margin-bottom:10px">
+            ${month.map(d=>`<div style="flex:1;text-align:center;font-size:10px;font-weight:700;color:var(--muted)">${d}</div>`).join('')}
+          </div>
+          <div class="attendance-grid">
+            ${[...Array(5)].map(()=>`<div class="att-day att-empty"></div>`).join('')}
+            ${days.map((d,i)=>`<div class="att-day ${d==='present'?'att-present':d==='absent'?'att-absent':d==='today'?'att-today':'att-empty'}" title="Nov ${i+1}">${i+1}</div>`).join('')}
+          </div>
+          <div style="display:flex;gap:16px;margin-top:14px;font-size:12px">
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:3px;background:#dcfce7;display:inline-block"></span> Present</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:3px;background:#fee2e2;display:inline-block"></span> Absent</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:3px;background:var(--navy);display:inline-block"></span> Today</span>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-title"><i class="fas fa-chart-bar" style="color:var(--gold)"></i> Subject-wise Attendance</div>
+            ${[
+              ['Data Structures','CS301',84,'var(--green)'],
+              ['Computer Networks','CS401',72,'var(--gold)'],
+              ['DBMS','CS302',91,'var(--green)'],
+              ['Operating Systems','CS303',68,'var(--gold)'],
+              ['Mathematics III','MA301',88,'var(--green)'],
+            ].map(([sub,code,pct,col])=>`
+            <div style="margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                <span>${sub} <span style="font-size:11px;color:var(--muted)">(${code})</span></span>
+                <b style="color:${col}">${pct}%</b>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Teacher / Admin view — mark attendance
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div class="section-title">📅 Mark Attendance</div>
+      <div class="section-actions">
+        <select class="form-input" style="padding:9px 14px;font-size:13px;width:200px">
+          <option>Data Structures (CS301)</option><option>Computer Networks (CS401)</option>
+        </select>
+        <button class="btn btn-gold" onclick="showToast('✅ Attendance saved!')"><i class="fas fa-save"></i> Save Attendance</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Roll No.</th><th>Student Name</th><th>Today (${new Date().toDateString()})</th><th>Total Present</th><th>%</th></tr></thead>
+        <tbody>
+          ${[['CE2024001','Rahul Patil',true,18],['CE2024002','Priya Sharma',true,22],['CE2024003','Aditya Kumar',false,14],['CE2024004','Sneha Joshi',true,20],['CE2024005','Rohan Desai',false,11],['CE2024006','Ankita More',true,23]].map(([r,n,p,total])=>`
+          <tr>
+            <td>${r}</td>
+            <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar">${n[0]}</div>${n}</div></td>
+            <td>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                <input type="checkbox" ${p?'checked':''} style="width:16px;height:16px;accent-color:var(--green)">
+                <span style="font-size:13px;color:${p?'var(--green)':'var(--red)'}">${p?'Present':'Absent'}</span>
+              </label>
+            </td>
+            <td>${total}/24</td>
+            <td><b style="color:${Math.round(total/24*100)>=75?'var(--green)':'var(--red)'}">${Math.round(total/24*100)}%</b></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ──────────── GRADES ────────────
+function gradesPanel() {
+  if (currentRole === 'student') {
+    const subjects = [
+      {name:'Data Structures',code:'CS301',ia1:22,ia2:20,mid:38,total:80,grade:'A',cgpa:9},
+      {name:'Computer Networks',code:'CS401',ia1:18,ia2:17,mid:32,total:67,grade:'B',cgpa:8},
+      {name:'DBMS',code:'CS302',ia1:24,ia2:23,mid:42,total:89,grade:'A+',cgpa:10},
+      {name:'Operating Systems',code:'CS303',ia1:16,ia2:19,mid:30,total:65,grade:'B',cgpa:7},
+      {name:'Mathematics III',code:'MA301',ia1:20,ia2:21,mid:36,total:77,grade:'A',cgpa:9},
+    ];
+    return `
+    <div class="page">
+      <div class="section-hdr"><div class="section-title">📊 My Academic Record</div></div>
+      <div style="display:flex;gap:16px;margin-bottom:24px">
+        <div class="stat-card" style="flex:1"><div class="stat-label">Current CGPA</div><div class="stat-value" style="color:var(--navy)">8.60</div></div>
+        <div class="stat-card" style="flex:1"><div class="stat-label">Best Subject</div><div class="stat-value" style="font-size:18px;color:var(--green)">DBMS (CS302)</div></div>
+        <div class="stat-card" style="flex:1"><div class="stat-label">Total Credits</div><div class="stat-value">22</div></div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Subject</th><th>IA-1 (25)</th><th>IA-2 (25)</th><th>Mid-Sem (50)</th><th>Total (100)</th><th>Grade</th><th>Grade Points</th></tr></thead>
+          <tbody>
+            ${subjects.map(s=>`
+            <tr>
+              <td><b>${s.name}</b><div style="font-size:11px;color:var(--muted)">${s.code}</div></td>
+              <td>${s.ia1}</td><td>${s.ia2}</td><td>${s.mid}</td><td><b>${s.total}</b></td>
+              <td>
+                <div class="grade-ring grade-${s.grade[0]}" style="width:40px;height:40px;font-size:12px">${s.grade}</div>
+              </td>
+              <td><b>${s.cgpa}</b></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  // Teacher / Admin marks entry
+  return `
+  <div class="page">
+    <div class="section-hdr">
+      <div class="section-title">📊 Marks Entry</div>
+      <div class="section-actions">
+        <select class="form-input" style="padding:9px 14px;font-size:13px;width:220px">
+          <option>Data Structures (CS301)</option><option>Computer Networks (CS401)</option>
+        </select>
+        <button class="btn btn-gold" onclick="showToast('✅ Marks saved successfully!')"><i class="fas fa-save"></i> Save Marks</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Roll No.</th><th>Student</th><th>IA-1 (25)</th><th>IA-2 (25)</th><th>Mid-Sem (50)</th><th>Total</th><th>Grade</th></tr></thead>
+        <tbody>
+          ${[['CE2024001','Rahul Patil',22,20,38],['CE2024002','Priya Sharma',24,23,44],['CE2024003','Aditya Kumar',16,17,30],['CE2024004','Sneha Joshi',21,22,40],['CE2024005','Rohan Desai',14,13,26],['CE2024006','Ankita More',24,25,46]].map(([r,n,ia1,ia2,mid])=>{
+            const total=ia1+ia2+mid;
+            const grade=total>=90?'A+':total>=80?'A':total>=70?'B':total>=60?'C':'D';
+            return `<tr>
+              <td>${r}</td>
+              <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar">${n[0]}</div>${n}</div></td>
+              <td><input type="number" value="${ia1}" max="25" style="width:60px;padding:6px;border:1px solid var(--border);border-radius:6px;font-size:13px"></td>
+              <td><input type="number" value="${ia2}" max="25" style="width:60px;padding:6px;border:1px solid var(--border);border-radius:6px;font-size:13px"></td>
+              <td><input type="number" value="${mid}" max="50" style="width:60px;padding:6px;border:1px solid var(--border);border-radius:6px;font-size:13px"></td>
+              <td><b>${total}</b></td>
+              <td><span class="pill ${grade==='A+'||grade==='A'?'pill-green':grade==='B'?'pill-blue':grade==='C'?'pill-gold':'pill-red'}">${grade}</span></td>
+            </tr>`; }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ──────────── TIMETABLE ────────────
+function timetablePanel() {
+  const periods = ['08:30–09:30','09:30–10:30','10:30–11:30','12:30–01:30','01:30–02:30','02:30–03:30','03:30–04:30'];
+  const days2 = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const schedule = {
+    Monday:    ['Data Structures','Computer Networks','—','OS Lab','OS Lab','DBMS','—'],
+    Tuesday:   ['Computer Networks','—','Mathematics III','Data Structures','—','SE Lab','SE Lab'],
+    Wednesday: ['DBMS','Data Structures','—','Computer Networks','Mathematics III','—','Project Work'],
+    Thursday:  ['Mathematics III','DBMS','OS','—','Data Structures','Computer Networks','—'],
+    Friday:    ['OS','Mathematics III','Data Structures','DBMS','—','—','Library Hour'],
+    Saturday:  ['Tutorial DS','Tutorial CN','Tutorial OS','—','—','—','—'],
+  };
+  const colors2 = {'Data Structures':'#0f1c3f','Computer Networks':'#c8922a','DBMS':'#16a34a','OS':'#7c3aed','OS Lab':'#7c3aed','SE Lab':'#dc2626','Mathematics III':'#2563eb','Tutorial DS':'#0f1c3f','Tutorial CN':'#c8922a','Tutorial OS':'#7c3aed','Project Work':'#db2777','Library Hour':'#6b7280','—':'transparent'};
+
+  return `
+  <div class="page">
+    <div class="section-hdr"><div class="section-title">🕐 Class Timetable — SE Computer Engineering</div>
+      <div class="section-actions">
+        <button class="btn btn-outline" onclick="showToast('📄 Timetable PDF downloaded')"><i class="fas fa-download"></i> Download PDF</button>
+        ${currentRole==='admin'?`<button class="btn btn-gold" onclick="showToast('✏️ Edit timetable')"><i class="fas fa-pen"></i> Edit</button>`:''}
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="data-table" style="min-width:900px">
+        <thead>
+          <tr>
+            <th style="min-width:110px">Period</th>
+            ${days2.map(d=>`<th style="min-width:120px">${d}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${periods.map((p,pi)=>`
+          <tr>
+            <td style="font-weight:700;font-size:12px;color:var(--navy)">${p}</td>
+            ${days2.map(d=>{
+              const sub = schedule[d][pi];
+              const col = colors2[sub] || '#888';
+              return `<td><div style="background:${sub==='—'?'transparent':col+'18'};border-left:3px solid ${sub==='—'?'transparent':col};border-radius:0 6px 6px 0;padding:6px 8px;font-size:12px;font-weight:${sub==='—'?400:600};color:${sub==='—'?'var(--muted)':col}">${sub}</div></td>`;
+            }).join('')}
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+      ${Object.entries(colors2).filter(([k])=>k!=='—').map(([sub,col])=>`
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px"><span style="width:14px;height:14px;border-radius:3px;background:${col};display:inline-block"></span>${sub}</div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ══════════════ UTILS ══════════════
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Close modal on overlay click
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
+});
+</script>
+</body>
+</html>

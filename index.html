@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GHRCEM Learning — Login</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="login-page">
+  <!-- Decorative circles -->
+  <div class="login-deco" style="width:600px;height:600px;top:-200px;left:-100px;"></div>
+  <div class="login-deco" style="width:300px;height:300px;bottom:-100px;left:200px;"></div>
+
+  <!-- LEFT PANEL -->
+  <div class="login-left">
+    <div class="login-brand">
+      <div class="login-brand-logo">G</div>
+      <h1>GHRCEM<br><span>Learning</span> Portal</h1>
+      <p>G H Raisoni College of Engineering & Management</p>
+    </div>
+    <div class="login-features">
+      <div class="feat-item">
+        <div class="feat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+        <div class="feat-text">
+          <h4>Smart Teaching Tools</h4>
+          <p>Upload notes, assignments & manage your class</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon"><i class="fas fa-graduation-cap"></i></div>
+        <div class="feat-text">
+          <h4>Student Dashboard</h4>
+          <p>Access resources, track grades & attendance</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="feat-text">
+          <h4>Progress Analytics</h4>
+          <p>Real-time insights on academic performance</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon"><i class="fas fa-shield-halved"></i></div>
+        <div class="feat-text">
+          <h4>Secure & Role-Based</h4>
+          <p>Admin, Teacher & Student access control</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="login-right">
+    <div class="login-card">
+      <h2>Welcome Back</h2>
+      <p class="sub">Sign in to your GHRCEM account</p>
+
+      <!-- Role Selector -->
+      <div class="role-selector">
+        <button class="role-tab active" onclick="setRole('admin',this)" id="tab-admin">
+          <i class="fas fa-user-shield"></i> Admin
+        </button>
+        <button class="role-tab" onclick="setRole('teacher',this)" id="tab-teacher">
+          <i class="fas fa-chalkboard-teacher"></i> Teacher
+        </button>
+        <button class="role-tab" onclick="setRole('student',this)" id="tab-student">
+          <i class="fas fa-graduation-cap"></i> Student
+        </button>
+      </div>
+
+      <form id="loginForm" onsubmit="doLogin(event)">
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-envelope"></i>&nbsp; Email / Username</label>
+          <input class="form-input" type="text" id="loginEmail" placeholder="Enter your email" required value="admin@ghrcem.edu">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-lock"></i>&nbsp; Password</label>
+          <input class="form-input" type="password" id="loginPass" placeholder="••••••••" required value="admin123">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);cursor:pointer">
+            <input type="checkbox" id="rememberMe" style="width:14px;height:14px;accent-color:var(--gold)"> Remember me
+          </label>
+          <a href="#" style="font-size:12px;color:var(--gold);text-decoration:none;">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-login">Sign In &nbsp;<i class="fas fa-arrow-right"></i></button>
+      </form>
+
+      <div class="login-links">
+        New student? <a href="register.html">Register here</a>
+      </div>
+
+      <!-- Demo Credentials Box -->
+      <div style="margin-top:24px;padding:14px;background:rgba(200,146,42,.08);border:1px solid rgba(200,146,42,.2);border-radius:10px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:8px">Demo Credentials</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8">
+          <b>Admin:</b> admin@ghrcem.edu / admin123<br>
+          <b>Teacher:</b> teacher@ghrcem.edu / teacher123<br>
+          <b>Student:</b> student@ghrcem.edu / student123
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedRole = 'admin';
+
+const demoCredentials = {
+  admin: { email: 'admin@ghrcem.edu', pass: 'admin123' },
+  teacher: { email: 'teacher@ghrcem.edu', pass: 'teacher123' },
+  student: { email: 'student@ghrcem.edu', pass: 'student123' }
+};
+
+function setRole(role, el) {
+  selectedRole = role;
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const cred = demoCredentials[role];
+  document.getElementById('loginEmail').value = cred.email;
+  document.getElementById('loginPass').value = cred.pass;
+}
+
+function doLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const pass = document.getElementById('loginPass').value;
+
+  // Simple validation
+  const cred = demoCredentials[selectedRole];
+  if (email !== cred.email || pass !== cred.pass) {
+    alert('Invalid credentials. Please use the demo credentials shown below.');
+    return;
+  }
+
+  // Store session
+  localStorage.setItem('ghrcem_role', selectedRole);
+  localStorage.setItem('ghrcem_email', email);
+  const names = { admin: 'Dr. R. K. Sharma', teacher: 'Prof. S. Kulkarni', student: 'Rahul Patil' };
+  localStorage.setItem('ghrcem_name', names[selectedRole]);
+
+  // Redirect to dashboard
+  window.location.href = 'dashboard.html';
+}
+</script>
+</body>
+</html>
